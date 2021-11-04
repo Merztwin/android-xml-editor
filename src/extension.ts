@@ -45,7 +45,8 @@ class AppPanel {
 	private readonly _extensionUri: vscode.Uri;
 	private _disposables: vscode.Disposable[] = [];
 
-	public static createOrShow(extensionUri: vscode.Uri) {
+	public static createOrShow(extensionUri: vscode.Uri) 
+	{
 		vscode.commands.executeCommand('workbench.action.moveEditorToRightGroup')
 
 
@@ -64,30 +65,38 @@ class AppPanel {
 
 		const fse = require('fs-extra');
 		//@ts-ignore.
-		var sourceDir = path.join(rootUri?.path, "src/main/resources/drawable")
+		var resourcesDir = path.join(vscode.window.activeTextEditor.document.fileName)
 		var destinationDir = path.join(extensionUri.path, "/media/drawable")
 		fs.rmdirSync(destinationDir, { recursive: true });
 
 		// To copy a folder or file  
-		fse.copySync(sourceDir, destinationDir)
+		fse.copySync(resourcesDir, destinationDir)
 
 		const Jimp = require("jimp")
 
 
-		fs.readdir(destinationDir, function (err, files) {
+		fs.readdir(destinationDir, function (err, files) 
+		{
 			//handling error
-			if (err) {
+			if (err) 
+			{
 				return console.log('Unable to scan directory: ' + err);
 			}
 			//listing all files using forEach
-			for (let file of files) {
+			for (let file of files) 
+			{
 				//@ts-ignore
-				if (file.match(".jpg")) {
+				if (file.match(".jpg")) 
+				{
 					//@ts-ignore
-					Jimp.read(destinationDir + "\/" + file, function (err, image) {
-						if (err) {
+					Jimp.read(destinationDir + "\/" + file, function (err, image) 
+					{
+						if (err) 
+						{
 							console.log(err)
-						} else {
+						} 
+						else 
+						{
 							image.write(destinationDir + "\/" + file.replace('.jpg', '.png'))
 							fs.unlink(path.join(destinationDir, file), err => {
 								if (err) throw err;
