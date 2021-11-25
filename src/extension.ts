@@ -50,7 +50,6 @@ class AppPanel {
 		vscode.commands.executeCommand('workbench.action.moveEditorToRightGroup')
 
 
-
 		const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
@@ -65,8 +64,25 @@ class AppPanel {
 
 		const fse = require('fs-extra');
 		//@ts-ignore.
-		var resourcesDir = path.join(vscode.window.activeTextEditor.document.fileName)
-		var destinationDir = path.join(extensionUri.path, "/media/drawable")
+		let _resDir = editor?.document.uri.fsPath.split("/")
+		let _desDir = "/media/"
+		var resourcesDir = path.join(selection.fsPath)
+		if(_resDir!=null)
+		{
+			resourcesDir = ""
+			for(let i=0; i<(_resDir.length-1); i++)
+			{
+				resourcesDir+=("/"+_resDir[i])
+				if(i==(_resDir.length-2))
+				{
+					_desDir += _resDir[i]
+				}
+			}
+			console.log(resourcesDir)
+			console.log(_desDir)
+		}
+		
+		var destinationDir = path.join(extensionUri.path, _desDir)
 		fs.rmdirSync(destinationDir, { recursive: true });
 
 		// To copy a folder or file  
@@ -77,7 +93,7 @@ class AppPanel {
 
 		fs.readdir(destinationDir, function (err, files) 
 		{
-			//handling error
+				//handling error
 			if (err) 
 			{
 				return console.log('Unable to scan directory: ' + err);
@@ -107,7 +123,6 @@ class AppPanel {
 				}
 
 			}
-
 		});
 
 		function porcent(size: string) {
